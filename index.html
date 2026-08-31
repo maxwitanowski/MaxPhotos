@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maxwell — Photography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Pinyon+Script&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="masthead">
+      <h1 class="masthead-name">MAXWELL</h1>
+      <p class="masthead-script">photography</p>
+    </header>
+
+    <nav class="catnav" id="catNav" aria-label="Collections"></nav>
+
+    <main>
+      <div class="toolbar">
+        <p class="toolbar-count" id="photoCount">—</p>
+      </div>
+
+      <section class="gallery" id="gallery" aria-label="Photo gallery"></section>
+
+      <div class="empty" id="emptyState" hidden>
+        <p class="empty-script">the gallery awaits</p>
+        <p class="empty-note">New photographs are on their way.</p>
+      </div>
+    </main>
+
+    <footer class="colophon">
+      <p>© <span id="year"></span> Maxwell &nbsp;·&nbsp; photographed by a 14 year old</p>
+      <p class="colophon-contact">
+        contact me at
+        <a href="mailto:maxwitanowski@gmail.com">maxwitanowski@gmail.com</a>
+      </p>
+    </footer>
+
+    <!-- photo detail view -->
+    <div class="detail" id="detail" hidden>
+      <div class="detail-bar">
+        <button class="d-back" id="dBack">‹ &nbsp;Gallery</button>
+        <div class="detail-bar-right">
+          <button class="d-tool" id="dPrev" aria-label="Previous">‹ prev</button>
+          <button class="d-tool" id="dNext" aria-label="Next">next ›</button>
+        </div>
+      </div>
+
+      <div class="detail-stage">
+        <img id="dImage" alt="" />
+      </div>
+
+      <div class="detail-info" id="dInfoView">
+        <div class="detail-head">
+          <h2 class="detail-title" id="dTitle"></h2>
+          <div class="detail-actions">
+            <button class="d-tool" id="dDownload">Download</button>
+          </div>
+        </div>
+        <p class="detail-desc" id="dDesc"></p>
+        <dl class="detail-meta" id="dMeta"></dl>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" hidden></div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

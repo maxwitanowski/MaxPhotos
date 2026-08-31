@@ -1,0 +1,135 @@
+<!-- ARCHIVED: full upload/edit version of the site. To restore management
+     mode, copy this file over /index.html and archive/main.js over
+     /src/main.js. The current footer wording is kept below. -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maxwell — Photography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Pinyon+Script&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+
+    <div class="drop-veil" id="dropVeil" aria-hidden="true">
+      <div class="drop-veil-inner">
+        <span class="drop-veil-script">drop them here</span>
+        <span class="drop-veil-note">your signature is applied automatically</span>
+      </div>
+    </div>
+
+    <header class="masthead">
+      <h1 class="masthead-name">MAXWELL</h1>
+      <p class="masthead-script">photography</p>
+    </header>
+
+    <nav class="catnav" id="catNav" aria-label="Collections"></nav>
+
+    <main>
+      <div class="toolbar">
+        <p class="toolbar-count" id="photoCount">—</p>
+        <button class="btn-add" id="addBtn">
+          <span class="btn-add-plus" aria-hidden="true">+</span>
+          Add photographs
+        </button>
+      </div>
+
+      <input type="file" id="fileInput" accept="image/*" multiple hidden />
+
+      <section class="gallery" id="gallery" aria-label="Photo gallery"></section>
+
+      <div class="empty" id="emptyState" hidden>
+        <p class="empty-script">the gallery awaits</p>
+        <p class="empty-note">
+          Drag photographs anywhere on the page, or use the button above.<br />
+          Each one is signed <em>maxwell</em> the moment it arrives.
+        </p>
+      </div>
+    </main>
+
+    <footer class="colophon">
+      <p>© <span id="year"></span> Maxwell &nbsp;·&nbsp; photographed by a 14 year old</p>
+      <p class="colophon-contact">
+        contact me at
+        <a href="mailto:maxwitanowski@gmail.com">maxwitanowski@gmail.com</a>
+      </p>
+    </footer>
+
+    <!-- photo detail view -->
+    <div class="detail" id="detail" hidden>
+      <div class="detail-bar">
+        <button class="d-back" id="dBack">‹ &nbsp;Gallery</button>
+        <div class="detail-bar-right">
+          <button class="d-tool" id="dPrev" aria-label="Previous">‹ prev</button>
+          <button class="d-tool" id="dNext" aria-label="Next">next ›</button>
+        </div>
+      </div>
+
+      <div class="detail-stage">
+        <img id="dImage" alt="" />
+      </div>
+
+      <div class="detail-info" id="dInfoView">
+        <div class="detail-head">
+          <h2 class="detail-title" id="dTitle"></h2>
+          <div class="detail-actions">
+            <button class="d-tool" id="dEdit">Edit details</button>
+            <button class="d-tool" id="dDownload">Download</button>
+            <button class="d-tool d-danger" id="dDelete">Remove</button>
+          </div>
+        </div>
+        <p class="detail-desc" id="dDesc"></p>
+        <dl class="detail-meta" id="dMeta"></dl>
+      </div>
+
+      <form class="detail-info detail-form" id="dForm" hidden>
+        <div class="f-grid">
+          <label class="f-field f-wide">
+            <span>Title</span>
+            <input type="text" name="title" />
+          </label>
+          <label class="f-field">
+            <span>Collection</span>
+            <input type="text" name="category" list="catList" placeholder="e.g. Landscape" />
+            <datalist id="catList"></datalist>
+          </label>
+          <label class="f-field">
+            <span>Location</span>
+            <input type="text" name="location" placeholder="e.g. Blue Mountains, NSW" />
+          </label>
+          <label class="f-field">
+            <span>Camera</span>
+            <input type="text" name="camera" placeholder="e.g. Canon R6" />
+          </label>
+          <label class="f-field">
+            <span>Lens</span>
+            <input type="text" name="lens" placeholder="e.g. RF 24–70mm f/2.8" />
+          </label>
+          <label class="f-field">
+            <span>Settings</span>
+            <input type="text" name="settings" placeholder="e.g. 1/250s · f/8 · ISO 100" />
+          </label>
+          <label class="f-field f-wide">
+            <span>About this photograph</span>
+            <textarea name="description" rows="4" placeholder="The story behind the shot…"></textarea>
+          </label>
+        </div>
+        <div class="f-actions">
+          <button type="submit" class="btn-add">Save details</button>
+          <button type="button" class="d-tool" id="dCancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="toast" id="toast" hidden></div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

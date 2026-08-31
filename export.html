@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Export photos — Maxwell</title>
+    <title>Saving photos — Maxwell</title>
     <style>
       body {
         background: #0a0a0b;
@@ -22,71 +22,48 @@
       }
       h1 { font-weight: 300; letter-spacing: 0.1em; }
       p { color: #a8a29a; line-height: 1.6; }
-      code { color: #c9a86a; }
-      button {
-        font-family: Georgia, serif;
-        font-size: 1.05rem;
-        letter-spacing: 0.1em;
-        color: #ece7df;
-        background: none;
-        border: 1px solid rgba(236, 231, 223, 0.3);
-        padding: 0.6em 1.6em;
-        cursor: pointer;
-        margin-top: 1rem;
-      }
-      button:hover { border-color: #c9a86a; color: #c9a86a; }
-      #status { margin-top: 1.2rem; font-style: italic; }
+      #status { font-size: 1.15rem; color: #c9a86a; font-style: italic; }
     </style>
   </head>
   <body>
     <div class="panel">
-      <h1>Export photos</h1>
+      <h1>Saving your photos</h1>
       <p>
-        This copies every photo and its details out of the browser's database
-        into the project as real files, so they can be committed to GitHub and
-        never lost.
+        Copying every photo and its details out of the browser into the
+        project folder. This runs by itself — leave the page open.
       </p>
-      <p>
-        When the folder picker opens, choose
-        <code>Mphotos&nbsp;&gt;&nbsp;public&nbsp;&gt;&nbsp;photos</code>.
-      </p>
-      <button id="exportBtn">Choose folder &amp; export</button>
-      <p id="status"></p>
+      <p id="status">Starting…</p>
     </div>
 
     <script type="module">
       import { getAllPhotos } from '/src/db.js';
 
       const status = document.getElementById('status');
-      const btn = document.getElementById('exportBtn');
-
       const extFor = (t) => (t === 'image/png' ? 'png' : 'jpg');
 
-      btn.addEventListener('click', async () => {
+      async function send(name, body) {
+        const res = await fetch('/api/save-photo', {
+          method: 'POST',
+          headers: { 'X-Filename': name },
+          body,
+        });
+        if (!res.ok) throw new Error(`Saving ${name} failed (${res.status})`);
+      }
+
+      (async () => {
         try {
           const photos = await getAllPhotos();
           if (!photos.length) {
-            status.textContent = 'No photos found in this browser.';
-            return;
-          }
-
-          if (!window.showDirectoryPicker) {
             status.textContent =
-              'This browser cannot write folders directly — please open this page in Chrome or Edge.';
+              'No photos found in this browser — is this the browser you added them in?';
             return;
           }
-
-          const dir = await window.showDirectoryPicker({ mode: 'readwrite' });
 
           const manifest = { photos: [] };
           let done = 0;
           for (const p of photos) {
             const file = `${p.id}.${extFor(p.type)}`;
-            const handle = await dir.getFileHandle(file, { create: true });
-            const writable = await handle.createWritable();
-            await writable.write(p.blob);
-            await writable.close();
-
+            await send(file, p.blob);
             manifest.photos.push({
               file,
               title: p.title || p.name || 'Untitled',
@@ -102,24 +79,17 @@
               addedAt: p.addedAt || 0,
             });
             done++;
-            status.textContent = `Exporting… ${done} of ${photos.length}`;
+            status.textContent = `Saving… ${done} of ${photos.length}`;
           }
 
-          const mh = await dir.getFileHandle('photos.json', { create: true });
-          const mw = await mh.createWritable();
-          await mw.write(JSON.stringify(manifest, null, 2));
-          await mw.close();
-
-          status.textContent = `Done — ${done} photos and photos.json written. You can close this page.`;
+          await send('photos.json', JSON.stringify(manifest, null, 2));
+          status.textContent = `All done — ${done} photos saved. You can close this tab.`;
+          document.title = 'Done — photos saved';
         } catch (err) {
-          if (err.name === 'AbortError') {
-            status.textContent = 'Folder selection cancelled.';
-          } else {
-            console.error(err);
-            status.textContent = `Something went wrong: ${err.message}`;
-          }
+          console.error(err);
+          status.textContent = `Something went wrong: ${err.message}`;
         }
-      });
+      })();
     </script>
   </body>
 </html>

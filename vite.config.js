@@ -37,5 +37,7 @@ function photoSaver() {
 }
 
 export default defineConfig({
+  // Relative asset URLs so the built site works under GitHub Pages' /MaxPhotos/ subpath.
+  base: './',
   plugins: [photoSaver()],
 });

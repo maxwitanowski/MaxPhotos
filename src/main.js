@@ -31,6 +31,11 @@ document.getElementById('year').textContent = new Date().getFullYear();
 /* ---------- helpers ---------- */
 
 function normalizePhoto(p) {
+  // Records from the browser database carry an id (it is the store's keyPath),
+  // but manifest entries only have a filename. Without this every photo ended up
+  // with id === undefined, so find(p => p.id === detailId) always matched the
+  // first one and every thumbnail opened the same image.
+  p.id = p.id || p.file || p.url;
   p.title = p.title || p.name || 'Untitled';
   p.category = p.category || UNSORTED;
   p.description = p.description || '';
